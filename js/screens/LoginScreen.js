@@ -13,7 +13,7 @@ export default class LoginScreen extends React.Component {
         title: "Sign in"
     };
     submit = () => {
-        Alert.alert("Signing in...", "This shouldn't take too long.");
+        this.props.navigation.navigate('LoggedIn');
     };
     render() {
         return (

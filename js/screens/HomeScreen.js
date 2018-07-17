@@ -3,14 +3,15 @@ import React from 'react';
 import {
   Text,
   View,
-  StyleSheet
+  StyleSheet,
+  StatusBar
 } from 'react-native';
 
 import BaseButton from '../components/BaseButton';
 import colors from '../styles/colors';
 
 function Button(props) {
-  return <BaseButton color="#fff" androidTextColor={colors.primaryColor} {...props} />;
+  return <BaseButton color="#fff" androidTextColor={colors.primary} {...props} />;
 }
 
 export default class HomeScreen extends React.Component {
@@ -22,6 +23,10 @@ export default class HomeScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+        <StatusBar
+          backgroundColor={colors.primary}
+          barStyle="light-content"
+        />
         <Text style={styles.headerText}>Welcome to MyChat!</Text>
         <View style={styles.buttonContainer}>
           <Button onPress={this.goToLogin} title="Sign In" />
@@ -39,7 +44,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 25,
-    backgroundColor: colors.primaryColor,
+    backgroundColor: colors.primary,
   },
   headerText:{
     fontSize: 30,
