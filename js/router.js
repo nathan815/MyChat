@@ -17,7 +17,8 @@ import LogoutScreen from './screens/LogoutScreen';
 
 import DrawerContent from './DrawerContent';
 
-import { baseNavigationOptions, navigationOptionsWithHamburger } from './baseNavigationOptions';
+import { baseNavigationOptions, navigationOptionsWithHamburger, extraSpaceHeaderTop } from './baseNavigationOptions';
+
 const ConversationStack = createStackNavigator({
   ConversationList: {
     screen: ConversationListScreen,
@@ -28,7 +29,7 @@ const ConversationStack = createStackNavigator({
 
 const PeopleStack = createStackNavigator({
   People: {
-    screen: ConversationListScreen,
+    screen: PeopleScreen,
     navigationOptions: navigationOptionsWithHamburger
   },
 }, baseNavigationOptions);
@@ -40,33 +41,35 @@ const SettingsStack = createStackNavigator({
   },
 }, baseNavigationOptions);
 
+const drawerIcon = (name, tintColor) => <Icon ios={`ios-${name}`} android={`md-${name}`} color={tintColor} />;
+
 export const LoggedInNavigator = createDrawerNavigator({
   ConversationList: { 
     screen: ConversationStack, 
     navigationOptions: { 
-      drawerLabel: "Conversations",
-      drawerIcon: ({tintColor}) => <Icon ios="ios-chatbubbles" android="md-chatbubbles" tintColor={tintColor} />
+      drawerLabel: "My Conversations",
+      drawerIcon: ({tintColor}) => drawerIcon('chatbubbles', tintColor)
     },
   },
   People: {
     screen: PeopleStack,
     navigationOptions: {
       drawerLabel: "People",
-      drawerIcon: ({tintColor}) => <Icon ios="ios-people" android="md-people" tintColor={tintColor} />
+      drawerIcon: ({tintColor}) => drawerIcon('people', tintColor)
     }
   },
   Settings: {
     screen: SettingsStack,
     navigationOptions: {
       drawerLabel: "Settings",
-      drawerIcon: ({tintColor}) => <Icon ios="ios-settings" android="md-settings" tintColor={tintColor} />
+      drawerIcon: ({tintColor}) => drawerIcon('settings', tintColor)
     }
   },
   Logout: {
     screen: LogoutScreen,
     navigationOptions: {
       drawerLabel: "Log Out",
-      drawerIcon: ({tintColor}) => <Icon ios="ios-exit" android="md-exit" tintColor={tintColor} />
+      drawerIcon: ({tintColor}) => drawerIcon('exit', tintColor)
     }
   },
 }, {
@@ -82,5 +85,11 @@ export const LoggedOutNavigator = createStackNavigator({
   Register: RegisterScreen,
 }, {
   mode: 'modal',
-  gesturesEnabled: false
+  gesturesEnabled: false,
+  navigationOptions: {
+    headerStyle: {
+      paddingTop: extraSpaceHeaderTop,
+      height: 55 + extraSpaceHeaderTop,
+    },
+  }
 });

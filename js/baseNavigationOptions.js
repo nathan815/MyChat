@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableOpacity, StatusBar } from 'react-native';
 import { Icon } from 'native-base';
 import colors from './styles/colors';
-const extraSpaceHeaderTop = StatusBar.currentHeight ? StatusBar.currentHeight : 0;
+export const extraSpaceHeaderTop = StatusBar.currentHeight ? StatusBar.currentHeight : 0;
 export const baseNavigationOptions = {
   headerMode: 'float',
   navigationOptions: ({navigation}) => ({
@@ -13,7 +13,7 @@ export const baseNavigationOptions = {
     headerStyle: {
       backgroundColor: colors.primary,
       paddingTop: extraSpaceHeaderTop,
-      height: 50 + extraSpaceHeaderTop,
+      height: 55 + extraSpaceHeaderTop,
     },
   })
 };

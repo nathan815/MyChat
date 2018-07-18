@@ -61,7 +61,7 @@ export default class LoginScreen extends React.Component {
     render() {
         return (
             <SafeAreaView style={styles.container}>
-                <StatusBar barStyle="dark-content" />
+                <StatusBar barStyle="dark-content" backgroundColor="#fff" />
                 <Spinner visible={this.state.isLoading} textContent={"Signing in..."} textStyle={{color: '#FFF'}} />
 
                 <Form style={styles.form}>

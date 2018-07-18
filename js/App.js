@@ -42,7 +42,7 @@ export default class App extends Component {
     }
     return (
       <React.Fragment>
-        <StatusBar translucent barStyle="light-content" />
+        <StatusBar translucent barStyle="light-content" backgroundColor="rgba(0,0,0,0.3)" />
         {this.state.user ? <LoggedInNavigator screenProps={this.state.loggedInScreenProps} /> : <LoggedOutNavigator />}
         <MessageBar ref={(ref) => MessageBarManager.registerMessageBar(ref)} />
       </React.Fragment>

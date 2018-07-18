@@ -5,6 +5,7 @@ import android.support.multidex.MultiDexApplication;
 import com.facebook.react.ReactApplication;
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.firestore.RNFirebaseFirestorePackage;
+import io.invertase.firebase.auth.RNFirebaseAuthPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -24,9 +25,10 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-          new MainReactPackage(),
-          new RNFirebasePackage(),
-          new RNFirebaseFirestorePackage()
+              new MainReactPackage(),
+              new RNFirebasePackage(),
+              new RNFirebaseFirestorePackage(),
+              new RNFirebaseAuthPackage()
       );
     }
 

@@ -62,7 +62,7 @@ export default class RegisterScreen extends React.Component {
     render() {
         return (
             <SafeAreaView style={styles.container}>
-                <StatusBar barStyle="dark-content" />
+                <StatusBar barStyle="dark-content" backgroundColor="#fff" />
                 <Spinner visible={this.state.isLoading} textContent={"Creating account..."} textStyle={{color: '#FFF'}} />
 
                 <Form style={styles.form}>
