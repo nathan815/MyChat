@@ -15,7 +15,7 @@ export default class ConversationScreen extends React.Component {
     render() {
         return (
             <View>
-                <Text>{this.props.navigation.getParam('id')}</Text>
+                <Text>{this.props.navigation.getParam('conversation').conversationId}</Text>
             </View>
         );
     }
