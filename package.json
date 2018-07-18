@@ -11,6 +11,8 @@
     "react": "16.3.1",
     "react-native": "0.55.4",
     "react-native-firebase": "^4.3.7",
+    "react-native-loading-spinner-overlay": "^0.5.2",
+    "react-native-message-bar": "^2.0.10",
     "react-navigation": "^2.6.2"
   },
   "devDependencies": {

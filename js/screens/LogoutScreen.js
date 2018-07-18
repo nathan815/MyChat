@@ -1,11 +1,12 @@
 import React from 'react';
+import firebase from 'react-native-firebase';
 
 export default class LogoutScreen extends React.Component {
   constructor() {
     super();
   }
   componentDidMount() {
-    this.props.navigation.navigate('LoggedOut');
+    firebase.auth().signOut();
   }
   render() {
     return null;

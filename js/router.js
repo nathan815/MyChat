@@ -15,58 +15,72 @@ import PeopleScreen from './screens/people/PeopleScreen';
 import SettingsScreen from './screens/settings/SettingsScreen';
 import LogoutScreen from './screens/LogoutScreen';
 
-const defaultNavOptions = {
-  headerMode: 'screen',
-  navigationOptions: ({navigation}) => ({
-    headerLeft: (
-      <TouchableOpacity onPress={navigation.openDrawer} >
-        <Icon name="menu" style={{ fontSize: 25, color: '#fff', paddingLeft: 20 }} />
-      </TouchableOpacity>
-    ),
-    headerStyle: {
-      backgroundColor: colors.primary,
-      paddingTop: StatusBar.currentHeight,
-      height: 55 + StatusBar.currentHeight,
-    },
-    headerTitleStyle: {
-      color: '#fff',
-    },
-  })
-};
+import DrawerContent from './DrawerContent';
 
-
+import { baseNavigationOptions, navigationOptionsWithHamburger } from './baseNavigationOptions';
 const ConversationStack = createStackNavigator({
-  ConversationList: ConversationListScreen,
-  Conversation: ConversationScreen
-}, defaultNavOptions);
+  ConversationList: {
+    screen: ConversationListScreen,
+    navigationOptions: navigationOptionsWithHamburger
+  },
+  Conversation: ConversationScreen,
+}, baseNavigationOptions);
 
 const PeopleStack = createStackNavigator({
-  People: PeopleScreen,
-}, defaultNavOptions);
+  People: {
+    screen: ConversationListScreen,
+    navigationOptions: navigationOptionsWithHamburger
+  },
+}, baseNavigationOptions);
 
 const SettingsStack = createStackNavigator({
-  Settings: SettingsScreen,
-}, defaultNavOptions);
+  Settings: {
+    screen: SettingsScreen,
+    navigationOptions: navigationOptionsWithHamburger
+  },
+}, baseNavigationOptions);
 
-const LoggedInStack = createDrawerNavigator({
-  ConversationList: ConversationStack,
-  People: PeopleStack,
-  Settings: SettingsStack,
-  Logout: LogoutScreen
+export const LoggedInNavigator = createDrawerNavigator({
+  ConversationList: { 
+    screen: ConversationStack, 
+    navigationOptions: { 
+      drawerLabel: "Conversations",
+      drawerIcon: ({tintColor}) => <Icon ios="ios-chatbubbles" android="md-chatbubbles" tintColor={tintColor} />
+    },
+  },
+  People: {
+    screen: PeopleStack,
+    navigationOptions: {
+      drawerLabel: "People",
+      drawerIcon: ({tintColor}) => <Icon ios="ios-people" android="md-people" tintColor={tintColor} />
+    }
+  },
+  Settings: {
+    screen: SettingsStack,
+    navigationOptions: {
+      drawerLabel: "Settings",
+      drawerIcon: ({tintColor}) => <Icon ios="ios-settings" android="md-settings" tintColor={tintColor} />
+    }
+  },
+  Logout: {
+    screen: LogoutScreen,
+    navigationOptions: {
+      drawerLabel: "Log Out",
+      drawerIcon: ({tintColor}) => <Icon ios="ios-exit" android="md-exit" tintColor={tintColor} />
+    }
+  },
+}, {
+  contentComponent: DrawerContent,
+  contentOptions: {
+    activeTintColor: colors.primary,
+  },
 });
 
-const LoggedOutStack = createStackNavigator({
+export const LoggedOutNavigator = createStackNavigator({
   Home: HomeScreen,
   Login: LoginScreen,
   Register: RegisterScreen,
 }, {
-  navBar
-});
-
-export default createSwitchNavigator({
-  AppLoading: LoadingScreen,
-  LoggedIn: LoggedInStack,
-  LoggedOut: LoggedOutStack,
-}, {
-  initialRouteName: 'AppLoading'
+  mode: 'modal',
+  gesturesEnabled: false
 });

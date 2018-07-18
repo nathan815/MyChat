@@ -6,13 +6,16 @@ import {
 } from 'react-native';
 
 export default class ConversationScreen extends React.Component {
-    static navigationOptions = {
-        title: "Conversation with ..."
-    };
+    static navigationOptions = ({ navigation }) => ({
+        title: `${navigation.state.params ? navigation.state.params.title : "Conversation"}`,
+    })
+    componentDidMount() {
+        this.props.navigation.setParams({ title: this.props.navigation.getParam('conversation').name })
+    }
     render() {
         return (
             <View>
-                <Text>hello!</Text>
+                <Text>{this.props.navigation.getParam('id')}</Text>
             </View>
         );
     }

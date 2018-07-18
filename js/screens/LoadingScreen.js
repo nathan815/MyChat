@@ -17,22 +17,12 @@ export default class LoginScreen extends React.Component {
     header: null
   };
 
-  componentDidMount() {
-    setTimeout(() => {
-      this.props.navigation.navigate('LoggedIn');
-    },500);
-  }
-
   render() {
     return (
-<View style={styles.container}>
-  <StatusBar
-    backgroundColor={colors.primary}
-    barStyle="light-content"
-  />
-  <ActivityIndicator color="#fff" size="large" />
-</View>
-);
+      <View style={styles.container}>
+        <ActivityIndicator color="#fff" size="large" />
+      </View>
+    );
 }
 
 }
