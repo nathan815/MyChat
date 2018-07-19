@@ -52,9 +52,12 @@ export default class NewConversationScreen extends React.Component {
       updatedOn: new Date(),
       latestMessage: null,
       color: '#' + randomColor,
-    }).then(() => {
+    }).then((document) => {
       this.setState({
         isLoading: false
+      });
+      document.update({
+        conversationId: document.id
       });
       this.props.navigation.goBack();
     })
