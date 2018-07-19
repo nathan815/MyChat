@@ -2,10 +2,13 @@ import React from 'react';
 import firebase from 'react-native-firebase';
 
 import {
+  Text,
   TextInput,
   View,
+  KeyboardAvoidingView,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  Platform
 } from 'react-native';
 import ReversedFlatList from 'react-native-reversed-flat-list';
 import { Button, Icon } from 'native-base';
@@ -39,10 +42,10 @@ export default class ConversationScreen extends React.Component {
     }
   }
   loadMessages() {
-    this.messagesRef.orderBy('sentOn', 'desc').get().then(this.handleMessageUpdate).then(this.listenForMessages);
+    this.messagesRef.orderBy('sentOn', 'asc').get().then(this.handleMessageUpdate).then(this.listenForMessages);
   }
   listenForMessages = () => {
-    //this.unsubscribe = this.messagesRef.orderBy('sentOn', 'desc').onSnapshot(this.handleMessageUpdate);
+    this.unsubscribe = this.messagesRef.orderBy('sentOn', 'asc').onSnapshot(this.handleMessageUpdate);
   };
   handleMessageUpdate = (querySnapshot) => {
     const messages = {};
@@ -64,19 +67,30 @@ export default class ConversationScreen extends React.Component {
       return <Loading loadingText="Loading messages..." />;
     }
 
+    const sendButton = Platform.select({ 
+      android: <Icon name="send" style={styles.sendButtonIcon} />,
+      ios: <Text style={styles.sendButtonText}>Send</Text>
+    });
+
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={75} style={styles.container}>
+
         <ReversedFlatList data={Object.values(this.state.messages)}
                           renderItem={({item}) => <MessageItem message={item} />}
                           keyExtractor={(item, index) => item.id}
                           style={styles.list} />
+
         <View style={styles.formContainer}>
-          <TextInput placeholder="Send a message..." style={styles.input} underline={true} underlineColorAndroid={colors.primary} tintColor={colors.primary} />
+          <TextInput placeholder="Send a message..." 
+                     style={styles.input} 
+                     underlineColorAndroid={colors.primary} 
+                     tintColor={colors.primary} />
           <TouchableOpacity onPress={()=>{}} style={styles.sendButton}>
-            <Icon name="send" style={styles.sendButtonIcon} />
+            { sendButton }
           </TouchableOpacity>
         </View>
-      </View>
+        
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -93,10 +107,16 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     marginLeft: 10,
+    paddingVertical: 10,
   },
   sendButton: {
     paddingHorizontal: 10,
     justifyContent: 'center',
+  },
+  sendButtonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: colors.primary
   },
   sendButtonIcon: {
     fontSize: 35,

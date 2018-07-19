@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Text,  View, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
+import { Alert, Text,  View, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
 import { Fab, Icon } from 'native-base';
 import firebase from 'react-native-firebase';
 
@@ -33,15 +33,22 @@ export default class ConversationListScreen extends React.Component {
 
   listenForConversations = () => {
     const user = firebase.auth().currentUser;
-    this.unsubscribe = this.conversationsRef.where(`users.${user.uid}`, '=', true).orderBy('updatedOn', 'desc').onSnapshot(this.handleConversationListUpdate);
+    console.log('listening',user);
+    this.unsubscribe = this.conversationsRef.where(`users.${user.uid}`, '==', true).onSnapshot(this.handleConversationListUpdate);
+  };
+
+  loadConversations = () => {
+    this.conversationsRef.where(`users.${user.uid}`, '=', true).get()
+    .then(this.handleConversationListUpdate)
+    .catch((err) => alert(err));
   };
 
   handleConversationListUpdate = (querySnapshot) => {
+    console.log('snapshot',querySnapshot);
     const conversations = [];
     querySnapshot.forEach(document => {
       conversations[document.id] = document.data();
     });
-    console.log(conversations);
     this.setState((prevState, props) => {
       return {
         conversations: Object.assign(prevState.conversations, conversations),
@@ -54,12 +61,30 @@ export default class ConversationListScreen extends React.Component {
     this.props.navigation.push('Conversation', { conversation });
   };
 
+  askToDeleteConversation = (conversation) => {
+    Alert.alert(
+      'Delete Conversation',
+      `Do you really want to delete "${conversation.name}"?`,
+      [
+        {text: 'Cancel', style: 'cancel'},
+        {text: 'OK', onPress: () => this.deleteConversation(conversation) },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  deleteConversation = (conversation) => {
+    alert('deleted conversation');
+  };
+
   newConversation() {
     this.props.navigation.navigate('NewConversation');
   }
 
   renderItem(conversation) {
-    return <ConversationListItem conversation={conversation} onClick={() => this.goToConversation(conversation)} />;
+    return <ConversationListItem conversation={conversation} 
+                                 onPress={() => this.goToConversation(conversation)} 
+                                 onLongPress={() => this.askToDeleteConversation(conversation)} />;
   }
 
   render() {

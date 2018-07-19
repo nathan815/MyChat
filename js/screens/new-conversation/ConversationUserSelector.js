@@ -9,6 +9,7 @@ import {
   StyleSheet,
   StatusBar,
   Keyboard,
+  Platform
 } from 'react-native';
 import { Form, Item, Input, Button, Text, List, ListItem, Icon, Left, Right } from 'native-base';
 import firebase from 'react-native-firebase';
@@ -37,7 +38,7 @@ export default class ConversationUserSelector extends React.Component {
   addUser = () => {
     if(this.state.enteredName.length === 0)
       return;
-    //this.setState({ isAddingUser: true });
+    this.setState({ isAddingUser: true });
     console.log('adding')
 
     firebase.firestore().collection('users').where('username', '==', this.state.enteredName).get().then((querySnapshot) => {
@@ -49,8 +50,7 @@ export default class ConversationUserSelector extends React.Component {
         this.setState((prevState) => {
           return {
             users: {...prevState.users, ...users},
-            enteredName: "",
-            isAddingUser: false
+            enteredName: ""
           };
         });
         this.props.onUserListChange(this.state.users);
@@ -58,6 +58,7 @@ export default class ConversationUserSelector extends React.Component {
       else {
         this.showErrorMessage("User not found");
       }
+      this.setState({ isAddingUser: false });
     }).catch((err) => {
       this.showErrorMessage(err);
       this.setState({ isAddingUser: false });
@@ -75,7 +76,7 @@ export default class ConversationUserSelector extends React.Component {
       title: 'An Error Occurred',
       message: message,
       alertType: 'error',
-      position: 'bottom',
+      position: Platform.OS === 'ios' ? 'top' : 'bottom',
     });
   }
   renderUserList() {
@@ -88,7 +89,7 @@ export default class ConversationUserSelector extends React.Component {
             <Text>{user.username}</Text>
           </Left>
           <Right>
-            <Button small danger onPress={()=>this.removeUser(id)}><Icon name="trash" /></Button>
+            <Button small danger onPress={()=>this.removeUser(id)}><Icon name="trash" ios="ios-close" /></Button>
           </Right>
         </ListItem>
       );
@@ -109,9 +110,9 @@ export default class ConversationUserSelector extends React.Component {
             <Input border rounded placeholder="Enter a Username..."
                    onChangeText={(name)=>this.setState({ enteredName: name })}
                    value={this.state.enteredName}
-                   style={styles.input}/>
+                   style={styles.input} autoCapitalize="none" />
             <Button disabled={this.state.isAddingUser} style={styles.addButton} onPress={this.addUser}>
-               <Text>Add User</Text>
+               <Text>Add</Text>
             </Button>
           </Item>
 

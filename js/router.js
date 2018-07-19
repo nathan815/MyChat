@@ -25,7 +25,10 @@ const ConversationStack = createStackNavigator({
     navigationOptions: navigationOptionsWithHamburger
   },
   Conversation: ConversationScreen,
-  NewConversation: NewConversationScreen
+  NewConversation: {
+    screen: NewConversationScreen,
+    mode: 'modal'
+  },
 }, baseNavigationOptions);
 
 const PeopleStack = createStackNavigator({
@@ -48,28 +51,28 @@ export const LoggedInNavigator = createDrawerNavigator({
   ConversationList: { 
     screen: ConversationStack, 
     navigationOptions: { 
-      drawerLabel: "My Conversations",
+      drawerLabel: 'My Conversations',
       drawerIcon: ({tintColor}) => drawerIcon('chatbubbles', tintColor)
     },
   },
   People: {
     screen: PeopleStack,
     navigationOptions: {
-      drawerLabel: "People",
+      drawerLabel: 'People',
       drawerIcon: ({tintColor}) => drawerIcon('people', tintColor)
     }
   },
   Settings: {
     screen: SettingsStack,
     navigationOptions: {
-      drawerLabel: "Settings",
+      drawerLabel: 'Settings',
       drawerIcon: ({tintColor}) => drawerIcon('settings', tintColor)
     }
   },
   Logout: {
     screen: LogoutScreen,
     navigationOptions: {
-      drawerLabel: "Log Out",
+      drawerLabel: 'Logout',
       drawerIcon: ({tintColor}) => drawerIcon('exit', tintColor)
     }
   },
@@ -92,5 +95,6 @@ export const LoggedOutNavigator = createStackNavigator({
       paddingTop: extraSpaceHeaderTop,
       height: 55 + extraSpaceHeaderTop,
     },
+    headerTintColor: colors.primary,
   }
 });

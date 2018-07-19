@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { ListItem, Body, Left, Right, Text } from 'native-base';
 import TimeAgo from 'react-native-timeago';
 import Moment from 'moment';
@@ -43,13 +43,18 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   message: {
+    ...Platform.select({
+      ios: {
+        borderRadius: 25,
+        paddingVertical: 9
+      },
+      android: {
+        borderRadius: 15,
+        paddingVertical: 12
+      }
+    }),
     paddingHorizontal: 15,
-    paddingVertical: 12,
-    borderRadius: 15,
     marginVertical: 3,
-    shadowOffset:{ width: 10, height: 10, },
-    shadowColor: '#000',
-    shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 2,
   },
@@ -59,7 +64,7 @@ const styles = StyleSheet.create({
   myMessage: {
     alignSelf: 'flex-end',
     backgroundColor: colors.primary,
-    borderTopRightRadius: 5,
+    borderTopRightRadius: Platform.OS === 'android' ? 5 : null,
   },
   myMessageText: {
     color: '#fff',
@@ -67,7 +72,7 @@ const styles = StyleSheet.create({
   theirMessage: {
     alignSelf: 'flex-start',
     backgroundColor: '#fff',
-    borderTopLeftRadius: 5,
+    borderTopLeftRadius: Platform.OS === 'android' ? 5 : null,
   },
   theirMessageText: {
     color: '#555'

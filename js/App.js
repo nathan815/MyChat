@@ -43,7 +43,7 @@ export default class App extends Component {
       <React.Fragment>
         <StatusBar translucent barStyle="light-content" backgroundColor="rgba(0,0,0,0.3)" />
         { navigator }
-        <MessageBar ref={(ref) => MessageBarManager.registerMessageBar(ref)} />
+        <MessageBar ref={(ref) => MessageBarManager.registerMessageBar(ref)} viewTopInset={15} />
       </React.Fragment>
     );
   }
