@@ -14,6 +14,7 @@ import {
 import { Form, Item, Input, Button, Text } from 'native-base';
 import colors from '../../styles/colors';
 import ConversationUserSelector from './ConversationUserSelector';
+import firebase from 'react-native-firebase';
 
 export default class NewConversationScreen extends React.Component {
   static navigationOptions = {
@@ -33,9 +34,30 @@ export default class NewConversationScreen extends React.Component {
     if(!this.state.name || this.state.selectedUsers.length === 0) {
       return;
     }
-    this.setState({ isLoading: true });
+    //this.setState({ isLoading: true });
     Keyboard.dismiss();
-    //this.props.navigation.goBack();
+    const randomColor = Math.floor(Math.random()*16777215).toString(16);
+    const myUserId = firebase.auth().currentUser.uid;
+    const userIds = Object.keys(this.state.selectedUsers);
+    const users = {};
+    userIds.forEach((id) => {
+      users[id] = true;
+    });
+    users[myUserId] = true;
+    console.log(users);
+    firebase.firestore().collection('conversations').add({
+      name: this.state.name,
+      users: users,
+      createdOn: new Date(),
+      updatedOn: new Date(),
+      latestMessage: null,
+      color: '#' + randomColor,
+    }).then(() => {
+      this.setState({
+        isLoading: false
+      });
+      this.props.navigation.goBack();
+    })
   };
   setSelectedUsers = (users) => {
     this.setState({

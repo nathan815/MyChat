@@ -8,7 +8,7 @@ export default class ConversationListItem extends React.PureComponent {
   render() {
     const { name, latestMessage, updatedOn, color } = this.props.conversation;
     const showTimeAgo = Moment(updatedOn).isSame(new Date(), 'day');
-    const displayDate = showTimeAgo ? <TimeAgo time={updatedOn} hideAgo={true} /> : Moment(updatedOn).format('MM/DD/YYYY');
+    const displayDate = showTimeAgo ? <TimeAgo time={updatedOn} /> : Moment(updatedOn).format('MM/DD/YYYY');
     return (
       <ListItem avatar style={styles.item} onPress={this.props.onPress} onLongPress={this.props.onLongPress}>
         <Left>

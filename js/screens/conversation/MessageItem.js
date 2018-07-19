@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { ActivityIndicator, View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { ListItem, Body, Left, Right, Text } from 'native-base';
 import TimeAgo from 'react-native-timeago';
 import Moment from 'moment';
@@ -7,19 +7,48 @@ import firebase from 'react-native-firebase';
 import colors from '../../styles/colors';
 
 export default class ConversationListItem extends React.PureComponent {
+  constructor() {
+    super();
+    this.state = {
+      username: null
+    };
+  }
+  getUsername() {
+    const userId = this.props.message.userId;
+    if(!userId || firebase.auth().currentUser.uid === userId)
+      return;
+    firebase.firestore().collection('users').doc(userId).get().then((document) => {
+      this.setState({
+        username: document.data().username
+      });
+    });
+  }
+  componentDidMount() {
+    this.getUsername();
+  }
   render() {
-    const { text, sentOn, userId, senderName } = this.props.message;
+    const { text, sentOn, userId } = this.props.message;
 
     const showTimeAgo = Moment(sentOn).isSame(new Date(), 'hour');
-    const displayDate = showTimeAgo ? <TimeAgo time={sentOn} hideAgo={true} /> : Moment(sentOn).format('h:mm a');
+    const displayDate = showTimeAgo ? <TimeAgo time={sentOn} /> : Moment(sentOn).format('M/D h:mm a');
 
-    const isMyMessage = firebase.auth().currentUser.uid === userId
+    const isMyMessage = firebase.auth().currentUser.uid === userId;
     const messageStyle = isMyMessage ? styles.myMessage : styles.theirMessage;
     const messageContainerStyle = isMyMessage ? styles.myMessageContainer : styles.theirMessageContainer;
     const messageTextStyle = isMyMessage ? styles.myMessageText : styles.theirMessageText;
+
+    let senderName = null;
+    if(!isMyMessage) {
+      senderName = (
+        <View style={styles.senderNameContainer}>
+          {this.state.username ? <Text style={styles.senderNameText}>{this.state.username}</Text> : <ActivityIndicator />}
+        </View>
+      );
+    }
+
     return (
       <View style={[styles.container, messageContainerStyle]}>
-        { !isMyMessage && <Text style={styles.senderNameText}>{ senderName }</Text> }
+        { senderName }
         <View style={[styles.message, messageStyle]}>
           <Text style={[styles.messageText, messageTextStyle]}>{text}</Text>
         </View>
@@ -34,7 +63,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     paddingHorizontal: 15,
-    paddingVertical: 5
+    paddingVertical: 5,
   },
   myMessageContainer: {
     alignItems: 'flex-end',
@@ -76,6 +105,9 @@ const styles = StyleSheet.create({
   },
   theirMessageText: {
     color: '#555'
+  },
+  senderNameContainer: {
+    height: 20
   },
   senderNameText: {
     color: '#777',

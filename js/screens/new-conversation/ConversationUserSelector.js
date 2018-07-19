@@ -39,7 +39,7 @@ export default class ConversationUserSelector extends React.Component {
     if(this.state.enteredName.length === 0)
       return;
     this.setState({ isAddingUser: true });
-    console.log('adding')
+    console.log('adding');
 
     firebase.firestore().collection('users').where('username', '==', this.state.enteredName).get().then((querySnapshot) => {
       const users = {};

@@ -96,7 +96,7 @@ export default class ConversationListScreen extends React.Component {
       <View style={styles.container}>
         <FlatList data={Object.values(this.state.conversations)}
                   renderItem={({item}) => this.renderItem(item)}
-                  keyExtractor={(item, index) => item.conversationId} />
+                  keyExtractor={(item, index) => index.toString()} />
 
         <Fab
           direction="up"
