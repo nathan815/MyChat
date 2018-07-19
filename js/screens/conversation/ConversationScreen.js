@@ -75,14 +75,17 @@ export default class ConversationScreen extends React.Component {
       users: this.state.users,
       sentOn: new Date(),
     }).then((document) => {
-
+      this.conversationRef.update({
+        updatedOn: new Date(),
+        latestMessage: message,
+      });
+      this.setState({
+        enteredMessage: ""
+      });
     }).catch((err) => {
       alert('Unable to send message');
     });
-    this.conversationRef.update({
-      updatedOn: new Date(),
-      latestMessage: message,
-    });
+
   };
   render() {
     if(this.state.isLoading) {
