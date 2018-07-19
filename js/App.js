@@ -3,7 +3,7 @@ import { StatusBar } from 'react-native';
 import firebase from 'react-native-firebase';
 import { MessageBar, MessageBarManager } from 'react-native-message-bar';
 
-import { LoggedInNavigator, LoggedOutNavigator } from './router';
+import { LoggedInNavigator, LoggedOutNavigator } from './navigation';
 import LoadingScreen from './screens/LoadingScreen';
 
 export default class App extends Component {
