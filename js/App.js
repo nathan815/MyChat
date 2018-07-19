@@ -9,11 +9,11 @@ import LoadingScreen from './screens/LoadingScreen';
 export default class App extends Component {
 
   constructor() {
-      super();
-      this.authUnsubscribe = null;
-      this.state = {
-        user: null,
-        isLoading: true,
+    super();
+    this.authUnsubscribe = null;
+    this.state = {
+      user: null,
+      isLoading: true,
     };
   }
 
@@ -24,7 +24,6 @@ export default class App extends Component {
         isLoading: false
       });
     });
-    console.log("REFS",this.refs);
   }
 
   componentWillUnmount() {
