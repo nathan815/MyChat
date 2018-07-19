@@ -41,7 +41,9 @@ export default class ConversationListItem extends React.PureComponent {
     if(!isMyMessage) {
       senderName = (
         <View style={styles.senderNameContainer}>
-          {this.state.username ? <Text style={styles.senderNameText}>{this.state.username}</Text> : <ActivityIndicator />}
+          <Text style={styles.senderNameText}>
+            {this.state.username ? this.state.username : '...'}
+          </Text>
         </View>
       );
     }
