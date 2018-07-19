@@ -28,12 +28,14 @@ export default class ConversationScreen extends React.Component {
     this.state = {
       messages: {},
       isLoading: true,
+      enteredMessage: "",
     };
   }
   componentDidMount() {
     this.conversation = this.props.navigation.getParam('conversation', {});
     this.props.navigation.setParams({ title: this.conversation.name });
-    this.messagesRef = firebase.firestore().collection('conversations').doc(this.conversation.conversationId).collection('messages');
+    this.conversationRef = firebase.firestore().collection('conversations').doc(this.conversation.conversationId);
+    this.messagesRef = this.conversationRef.collection('messages');
     this.loadMessages();
   }
   componentWillUnmount() {
@@ -62,6 +64,26 @@ export default class ConversationScreen extends React.Component {
     });
     return Promise.resolve();
   };
+  sendMessage = ()=> {
+    const message = this.state.enteredMessage;
+    if(message.length === 0) {
+      return;
+    }
+    this.conversationRef.collection('messages').add({
+      text: message,
+      userId: firebase.auth().currentUser.uid,
+      users: this.state.users,
+      sentOn: new Date(),
+    }).then((document) => {
+
+    }).catch((err) => {
+      alert('Unable to send message');
+    });
+    this.conversationRef.update({
+      updatedOn: new Date(),
+      latestMessage: message,
+    });
+  };
   render() {
     if(this.state.isLoading) {
       return <Loading loadingText="Loading messages..." />;
@@ -72,26 +94,39 @@ export default class ConversationScreen extends React.Component {
       ios: <Text style={styles.sendButtonText}>Send</Text>
     });
 
-    return (
-      <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={75} style={styles.container}>
-
+    const content = (
+      <React.Fragment>
         <ReversedFlatList data={Object.values(this.state.messages)}
                           renderItem={({item}) => <MessageItem message={item} />}
                           keyExtractor={(item, index) => item.id}
                           style={styles.list} />
 
         <View style={styles.formContainer}>
-          <TextInput placeholder="Send a message..." 
-                     style={styles.input} 
-                     underlineColorAndroid={colors.primary} 
-                     tintColor={colors.primary} />
-          <TouchableOpacity onPress={()=>{}} style={styles.sendButton}>
+          <TextInput placeholder="Send a message..."
+                     style={styles.input}
+                     underlineColorAndroid={colors.primary}
+                     tintColor={colors.primary}
+                     onChangeText={(text) => this.setState({ enteredMessage: text.trim() })}
+                     value={this.state.enteredMessage} />
+          <TouchableOpacity onPress={this.sendMessage} style={styles.sendButton}>
             { sendButton }
           </TouchableOpacity>
         </View>
-        
-      </KeyboardAvoidingView>
+      </React.Fragment>
     );
+
+    return Platform.select({
+      ios: (
+        <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={75}  style={styles.container}>
+          {content}
+        </KeyboardAvoidingView>
+      ),
+      android: (
+        <View style={styles.container}>
+          {content}
+        </View>
+      )
+    });
   }
 }
 

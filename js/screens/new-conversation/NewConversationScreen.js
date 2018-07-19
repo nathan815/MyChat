@@ -8,7 +8,8 @@ import {
   StyleSheet,
   StatusBar,
   Keyboard,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Platform
 } from 'react-native';
 import { Form, Item, Input, Button, Text } from 'native-base';
 import colors from '../../styles/colors';
@@ -50,8 +51,8 @@ export default class NewConversationScreen extends React.Component {
     });
   }
   render() {
-    return (
-      <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={75}  style={styles.container}>
+    const content = (
+      <React.Fragment>
         <Spinner visible={this.state.isLoading} textContent={"Creating..."} textStyle={{color: '#FFF'}} />
         <Form style={styles.form}>
           <Item>
@@ -64,8 +65,20 @@ export default class NewConversationScreen extends React.Component {
         <Button block onPress={this.submit} style={styles.button}>
           <Text>Start Conversation</Text>
         </Button>
-      </KeyboardAvoidingView>
+      </React.Fragment>
     );
+    return Platform.select({
+      ios: (
+        <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={75}  style={styles.container}>
+          {content}
+        </KeyboardAvoidingView>
+      ),
+      android: (
+        <View style={styles.container}>
+          {content}
+        </View>
+      )
+    });
   }
 }
 
