@@ -10,7 +10,7 @@ import ConversationListScreen from "./screens/conversation-list/ConversationList
 import HomeScreen from "./screens/HomeScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import ConversationScreen from "./screens/conversation/ConversationScreen";
-import LoadingScreen from "./screens/LoadingScreen";
+import NewConversationScreen from "./screens/new-conversation/NewConversationScreen";
 import PeopleScreen from './screens/people/PeopleScreen';
 import SettingsScreen from './screens/settings/SettingsScreen';
 import LogoutScreen from './screens/LogoutScreen';
@@ -25,6 +25,7 @@ const ConversationStack = createStackNavigator({
     navigationOptions: navigationOptionsWithHamburger
   },
   Conversation: ConversationScreen,
+  NewConversation: NewConversationScreen
 }, baseNavigationOptions);
 
 const PeopleStack = createStackNavigator({

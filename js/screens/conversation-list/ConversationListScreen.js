@@ -6,6 +6,7 @@ import firebase from 'react-native-firebase';
 
 import ConversationListItem from "./ConversationListItem";
 import colors from '../../styles/colors';
+import Loading from "../../common/Loading";
 
 export default class ConversationListScreen extends React.Component {
   static navigationOptions = {
@@ -32,14 +33,13 @@ export default class ConversationListScreen extends React.Component {
 
   listenForConversations = () => {
     const user = firebase.auth().currentUser;
-    this.unsubscribe = this.conversationsRef.where("users." + user.uid, '=', true).orderBy('updatedOn', 'desc').onSnapshot(this.addConversationsToList);
+    this.unsubscribe = this.conversationsRef.where(`users.${user.uid}`, '=', true).orderBy('updatedOn', 'desc').onSnapshot(this.handleConversationListUpdate);
   };
 
-  addConversationsToList = (querySnapshot) => {
+  handleConversationListUpdate = (querySnapshot) => {
     const conversations = [];
     querySnapshot.forEach(document => {
-      const conversation = document.data();
-      conversations[conversation.conversationId] = conversation;
+      conversations[document.id] = document.data();
     });
     console.log(conversations);
     this.setState((prevState, props) => {
@@ -55,7 +55,7 @@ export default class ConversationListScreen extends React.Component {
   };
 
   newConversation() {
-
+    this.props.navigation.navigate('NewConversation');
   }
 
   renderItem(conversation) {
@@ -64,12 +64,7 @@ export default class ConversationListScreen extends React.Component {
 
   render() {
     if(this.state.isLoading) {
-      return (
-        <View style={styles.loading}>
-          <ActivityIndicator size="large" color={colors.primary} />
-          <Text style={styles.loadingText}>Loading conversations...</Text>
-        </View>
-      );
+      return <Loading loadingText="Loading conversations..." />;
     }
 
     return (
@@ -95,14 +90,6 @@ export default class ConversationListScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1
-  },
-  loading: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  loadingText: {
-    color: colors.primary
   },
   fab: {
     backgroundColor: colors.primary,

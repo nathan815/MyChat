@@ -7,7 +7,7 @@ import {
   StatusBar
 } from 'react-native';
 
-import BaseButton from '../components/BaseButton';
+import BaseButton from '../common/BaseButton';
 import colors from '../styles/colors';
 
 function Button(props) {

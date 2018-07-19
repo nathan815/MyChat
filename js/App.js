@@ -14,7 +14,6 @@ export default class App extends Component {
       this.state = {
         user: null,
         isLoading: true,
-        loggedInScreenProps: {}
     };
   }
 
@@ -26,7 +25,6 @@ export default class App extends Component {
       });
     });
     console.log("REFS",this.refs);
-    //MessageBarManager.registerMessageBar(this.refs.alert);
   }
 
   componentWillUnmount() {
@@ -40,10 +38,11 @@ export default class App extends Component {
     if (this.state.isLoading) {
       return <LoadingScreen />;
     }
+    const navigator = this.state.user ? <LoggedInNavigator /> : <LoggedOutNavigator />;
     return (
       <React.Fragment>
         <StatusBar translucent barStyle="light-content" backgroundColor="rgba(0,0,0,0.3)" />
-        {this.state.user ? <LoggedInNavigator screenProps={this.state.loggedInScreenProps} /> : <LoggedOutNavigator />}
+        { navigator }
         <MessageBar ref={(ref) => MessageBarManager.registerMessageBar(ref)} />
       </React.Fragment>
     );
