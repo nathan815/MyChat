@@ -19,9 +19,9 @@ export default class App extends Component {
 
   componentDidMount() {
     this.authUnsubscribe = firebase.auth().onAuthStateChanged((user) => {
-      this.setState({ 
+      this.setState({
         user,
-        isLoading: false
+        isLoading: false,
       });
     });
   }
@@ -34,15 +34,19 @@ export default class App extends Component {
   }
 
   render() {
-    if (this.state.isLoading) {
+    if(this.state.isLoading) {
       return <LoadingScreen />;
     }
-    const navigator = this.state.user ? <LoggedInNavigator /> : <LoggedOutNavigator />;
     return (
       <React.Fragment>
-        <StatusBar translucent barStyle="light-content" backgroundColor="rgba(0,0,0,0.3)" />
-        { navigator }
-        <MessageBar ref={(ref) => MessageBarManager.registerMessageBar(ref)} viewTopInset={15} />
+        <StatusBar translucent
+                   barStyle="light-content"
+                   backgroundColor="rgba(0,0,0,0.3)" />
+
+        { this.state.user ? <LoggedInNavigator /> : <LoggedOutNavigator /> }
+
+        <MessageBar ref={(ref) => MessageBarManager.registerMessageBar(ref)}
+                    viewTopInset={15} />
       </React.Fragment>
     );
   }

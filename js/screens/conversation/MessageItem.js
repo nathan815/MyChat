@@ -19,9 +19,9 @@ export default class ConversationListItem extends React.PureComponent {
       return;
     firebase.firestore().collection('users').doc(userId).get().then((document) => {
       this.setState({
-        username: document.data().username
+        username: document.data() ? document.data().username : ''
       });
-    });
+    }).catch((err) => {});
   }
   componentDidMount() {
     this.getUsername();

@@ -1,6 +1,4 @@
 import React from 'react';
-import Spinner from 'react-native-loading-spinner-overlay';
-import { MessageBarManager } from 'react-native-message-bar';
 import {
   SafeAreaView,
   StyleSheet,
@@ -8,6 +6,9 @@ import {
   Keyboard,
 } from 'react-native';
 import { Form, Item, Input, Button, Text } from 'native-base';
+
+import Spinner from 'react-native-loading-spinner-overlay';
+import { MessageBarManager } from 'react-native-message-bar';
 import firebase from 'react-native-firebase';
 import colors from '../styles/colors';
 
@@ -59,8 +60,11 @@ export default class LoginScreen extends React.Component {
   render() {
     return (
       <SafeAreaView style={styles.container}>
-        <StatusBar barStyle="dark-content" backgroundColor="#fff" />
-        <Spinner visible={this.state.isLoading} textContent={"Signing in..."} textStyle={{color: '#FFF'}} />
+        <StatusBar barStyle="dark-content"
+                   backgroundColor="#fff" />
+        <Spinner visible={this.state.isLoading}
+                 textContent={"Signing in..."}
+                 textStyle={{color: '#FFF'}} />
 
         <Form style={styles.form}>
           <Item>
@@ -85,7 +89,9 @@ export default class LoginScreen extends React.Component {
                    returnKeyType="done" />
           </Item>
 
-          <Button block onPress={this.submit} style={styles.button}>
+          <Button block
+                  onPress={this.submit}
+                  style={styles.button}>
             <Text>Sign In</Text>
           </Button>
         </Form>

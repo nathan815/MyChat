@@ -44,7 +44,9 @@ export default class ConversationScreen extends React.Component {
     }
   }
   loadMessages() {
-    this.messagesRef.orderBy('sentOn', 'asc').get().then(this.handleMessageUpdate).then(this.listenForMessages);
+    this.messagesRef.orderBy('sentOn', 'asc').get()
+      .then(this.handleMessageUpdate)
+      .then(this.listenForMessages);
   }
   listenForMessages = () => {
     this.unsubscribe = this.messagesRef.orderBy('sentOn', 'asc').onSnapshot(this.handleMessageUpdate);

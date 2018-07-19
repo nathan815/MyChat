@@ -48,7 +48,7 @@ const SettingsStack = createStackNavigator({
 const drawerIcon = (name, tintColor) => <Icon ios={`ios-${name}`} android={`md-${name}`} color={tintColor} />;
 
 export const LoggedInNavigator = createDrawerNavigator({
-  ConversationList: { 
+  ConversationList: {
     screen: ConversationStack, 
     navigationOptions: { 
       drawerLabel: 'My Conversations',
