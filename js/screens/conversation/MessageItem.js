@@ -1,6 +1,6 @@
 import React from 'react';
-import { ActivityIndicator, View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
-import { ListItem, Body, Left, Right, Text } from 'native-base';
+import { View, StyleSheet, Platform, Text } from 'react-native';
+
 import TimeAgo from 'react-native-timeago';
 import Moment from 'moment';
 import firebase from 'react-native-firebase';
@@ -13,6 +13,9 @@ export default class ConversationListItem extends React.PureComponent {
       username: null
     };
   }
+  componentDidMount() {
+    this.getUsername();
+  }
   getUsername() {
     const userId = this.props.message.userId;
     if(!userId || firebase.auth().currentUser.uid === userId)
@@ -22,9 +25,6 @@ export default class ConversationListItem extends React.PureComponent {
         username: document.data() ? document.data().username : ''
       });
     }).catch((err) => {});
-  }
-  componentDidMount() {
-    this.getUsername();
   }
   render() {
     const { text, sentOn, userId } = this.props.message;
@@ -40,7 +40,7 @@ export default class ConversationListItem extends React.PureComponent {
     let senderName = null;
     if(!isMyMessage) {
       senderName = (
-        <View style={styles.senderNameContainer}>
+        <View>
           <Text style={styles.senderNameText}>
             {this.state.username ? this.state.username : '...'}
           </Text>
@@ -51,8 +51,8 @@ export default class ConversationListItem extends React.PureComponent {
     return (
       <View style={[styles.container, messageContainerStyle]}>
         { senderName }
-        <View style={[styles.message, messageStyle]}>
-          <Text style={[styles.messageText, messageTextStyle]}>{text}</Text>
+        <View style={[styles.messageBubble, messageStyle]}>
+          <Text style={[styles.messageText, messageTextStyle]}>{ text }</Text>
         </View>
         <Text style={styles.timestampText}>{ displayDate }</Text>
       </View>
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   theirMessageContainer: {
     alignItems: 'flex-start',
   },
-  message: {
+  messageBubble: {
     ...Platform.select({
       ios: {
         borderRadius: 25,
@@ -107,9 +107,6 @@ const styles = StyleSheet.create({
   },
   theirMessageText: {
     color: '#555'
-  },
-  senderNameContainer: {
-    height: 20
   },
   senderNameText: {
     color: '#777',

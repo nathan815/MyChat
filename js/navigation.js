@@ -1,6 +1,5 @@
 import React from 'react';
-import {TouchableOpacity,StatusBar,Platform} from "react-native";
-import {createStackNavigator, createDrawerNavigator, createSwitchNavigator} from "react-navigation";
+import { createStackNavigator, createDrawerNavigator } from "react-navigation";
 import { Icon } from 'native-base';
 
 import colors from './styles/colors';
@@ -17,7 +16,9 @@ import LogoutScreen from './screens/LogoutScreen';
 
 import DrawerContent from './DrawerContent';
 
-import { baseNavigationOptions, navigationOptionsWithHamburger, extraSpaceHeaderTop } from './baseNavigationOptions';
+import {
+  baseNavigationOptions, navigationOptionsWithHamburger, extraSpaceHeaderTop
+} from './baseNavigationOptions';
 
 const ConversationStack = createStackNavigator({
   ConversationList: {
@@ -45,11 +46,16 @@ const SettingsStack = createStackNavigator({
   },
 }, baseNavigationOptions);
 
-const drawerIcon = (name, tintColor) => <Icon ios={`ios-${name}`} android={`md-${name}`} color={tintColor} />;
+const drawerIcon = (name, tintColor) => (
+  <Icon name={name}
+        ios={`ios-${name}`}
+        android={`md-${name}`}
+        color={tintColor} />
+);
 
 export const LoggedInNavigator = createDrawerNavigator({
   ConversationList: {
-    screen: ConversationStack, 
+    screen: ConversationStack,
     navigationOptions: { 
       drawerLabel: 'My Conversations',
       drawerIcon: ({tintColor}) => drawerIcon('chatbubbles', tintColor)
